@@ -1,12 +1,12 @@
-import { NormalizedCache, NormalizedCacheObject, StoreObject } from './types';
+import { MemoryCache, NormalizedCacheObject, StoreObject } from '../types';
 
-export class RecordingCache implements NormalizedCache {
+export class ObjectCacheRecording
+  implements MemoryCache<NormalizedCacheObject> {
+  private recordedData: NormalizedCacheObject = {};
   constructor(private readonly data: NormalizedCacheObject = {}) {}
 
-  private recordedData: NormalizedCacheObject = {};
-
   public record(
-    transaction: (recordingCache: RecordingCache) => void,
+    transaction: (recordingCache: ObjectCacheRecording) => void,
   ): NormalizedCacheObject {
     transaction(this);
     const recordedData = this.recordedData;
@@ -45,12 +45,4 @@ export class RecordingCache implements NormalizedCache {
     this.clear();
     this.recordedData = { ...newData };
   }
-}
-
-export function record(
-  startingState: NormalizedCacheObject,
-  transaction: (recordingCache: RecordingCache) => void,
-): NormalizedCacheObject {
-  const recordingCache = new RecordingCache(startingState);
-  return recordingCache.record(transaction);
 }

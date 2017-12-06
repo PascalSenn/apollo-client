@@ -2,7 +2,6 @@ import { DocumentNode } from 'graphql';
 import { FragmentMatcher } from 'graphql-anywhere';
 import { Transaction } from 'apollo-cache';
 import { IdValue, StoreValue } from 'apollo-utilities';
-import { NormalizedCacheObject, NormalizedCache } from './types';
 
 export type IdGetter = (value: Object) => string | null | undefined;
 
@@ -10,7 +9,7 @@ export type IdGetter = (value: Object) => string | null | undefined;
  * This is an interface used to access, set and remove
  * StoreObjects from the cache
  */
-export interface NormalizedCache {
+export interface MemoryCache<T> {
   get(dataId: string): StoreObject;
   set(dataId: string, value: StoreObject): void;
   delete(dataId: string): void;
@@ -20,60 +19,64 @@ export interface NormalizedCache {
   /**
    * returns an Object with key-value pairs matching the contents of the store
    */
-  toObject(): NormalizedCacheObject;
+  toObject(): T;
   /**
    * replace the state of the store
    */
-  replace(newData: NormalizedCacheObject): void;
+  replace(newData: T): void;
 }
-
+export interface MemoryCacheRecording<T> extends MemoryCache<T> {
+  record(transaction: (recordingCache: MemoryCacheRecording<T>) => void): T;
+}
 /**
  * This is a normalized representation of the Apollo query result cache. It consists of
  * a flattened representation of query result trees.
  */
-export interface NormalizedCacheObject {
+export interface NormalizedCacheObject extends BaseCacheObject {
   [dataId: string]: StoreObject;
 }
+export interface BaseCacheObject {}
 
 export interface StoreObject {
   __typename?: string;
   [storeFieldKey: string]: StoreValue;
 }
 
-export type NormalizedCacheFactory = (
-  seed?: NormalizedCacheObject,
-) => NormalizedCache;
+export interface MemoryCacheFactory<T> {
+  createCache(seed?: T): MemoryCache<T>;
+  createRecordingCache(seed?: T): MemoryCacheRecording<T>;
+}
 
 export type OptimisticStoreItem = {
   id: string;
-  data: NormalizedCacheObject;
-  transaction: Transaction<NormalizedCacheObject>;
+  data: BaseCacheObject;
+  transaction: Transaction<BaseCacheObject>;
 };
 
-export type ReadQueryOptions = {
-  store: NormalizedCache;
+export type ReadQueryOptions<T> = {
+  store: MemoryCache<T>;
   query: DocumentNode;
   fragmentMatcherFunction?: FragmentMatcher;
   variables?: Object;
   previousResult?: any;
   rootId?: string;
-  config?: ApolloReducerConfig;
+  config?: ApolloReducerConfig<T>;
 };
 
-export type DiffQueryAgainstStoreOptions = ReadQueryOptions & {
+export type DiffQueryAgainstStoreOptions = ReadQueryOptions<any> & {
   returnPartialData?: boolean;
 };
 
-export type ApolloReducerConfig = {
+export type ApolloReducerConfig<T> = {
   dataIdFromObject?: IdGetter;
   fragmentMatcher?: FragmentMatcherInterface;
   addTypename?: boolean;
   cacheResolvers?: CacheResolverMap;
-  storeFactory?: NormalizedCacheFactory;
+  storeFactory?: MemoryCacheFactory<T>;
 };
 
 export type ReadStoreContext = {
-  store: NormalizedCache;
+  store: MemoryCache<any>;
   returnPartialData: boolean;
   hasMissingField: boolean;
   cacheResolvers: CacheResolverMap;

@@ -8,21 +8,16 @@ import {
 } from 'apollo-utilities';
 
 import { HeuristicFragmentMatcher } from './fragmentMatcher';
-import {
-  OptimisticStoreItem,
-  ApolloReducerConfig,
-  NormalizedCache,
-  NormalizedCacheObject,
-} from './types';
+import { OptimisticStoreItem, ApolloReducerConfig, MemoryCache } from './types';
 import { writeResultToStore } from './writeToStore';
 import { readQueryFromStore, diffQueryAgainstStore } from './readFromStore';
-import { defaultNormalizedCacheFactory } from './objectCache';
-import { record } from './recordingCache';
-const defaultConfig: ApolloReducerConfig = {
+import { getObjectCacheFactory } from './object-cache/objectCacheFactory';
+
+const defaultConfig = {
   fragmentMatcher: new HeuristicFragmentMatcher(),
   dataIdFromObject: defaultDataIdFromObject,
   addTypename: true,
-  storeFactory: defaultNormalizedCacheFactory,
+  storeFactory: getObjectCacheFactory(),
 };
 
 export function defaultDataIdFromObject(result: any): string | null {
@@ -36,10 +31,9 @@ export function defaultDataIdFromObject(result: any): string | null {
   }
   return null;
 }
-
-export class InMemoryCache extends ApolloCache<NormalizedCacheObject> {
-  private data: NormalizedCache;
-  protected config: ApolloReducerConfig;
+export class InMemoryCache<L> extends ApolloCache<L> {
+  private data: MemoryCache<L>;
+  protected config: ApolloReducerConfig<L>;
   protected optimistic: OptimisticStoreItem[] = [];
   private watches: Cache.WatchOptions[] = [];
   private addTypename: boolean;
@@ -48,22 +42,23 @@ export class InMemoryCache extends ApolloCache<NormalizedCacheObject> {
   // don't forget to turn it back on!
   private silenceBroadcast: boolean = false;
 
-  constructor(config: ApolloReducerConfig = {}) {
+  constructor(config: ApolloReducerConfig<L> = {}) {
     super();
-    this.config = { ...defaultConfig, ...config };
+    // TODO: Make nice
+    this.config = <any>{ ...defaultConfig, ...config };
     // backwards compat
     if ((this.config as any).customResolvers)
       this.config.cacheResolvers = (this.config as any).customResolvers;
     this.addTypename = this.config.addTypename ? true : false;
-    this.data = this.config.storeFactory();
+    this.data = this.config.storeFactory.createCache();
   }
 
-  public restore(data: NormalizedCacheObject): this {
+  public restore(data: L): this {
     if (data) this.data.replace(data);
     return this;
   }
 
-  public extract(optimistic: boolean = false): NormalizedCacheObject {
+  public extract(optimistic: boolean = false): L {
     if (optimistic && this.optimistic.length > 0) {
       const patches = this.optimistic.map(opt => opt.data);
       return Object.assign({}, this.data.toObject(), ...patches);
@@ -78,7 +73,9 @@ export class InMemoryCache extends ApolloCache<NormalizedCacheObject> {
     }
 
     return readQueryFromStore({
-      store: this.config.storeFactory(this.extract(query.optimistic)),
+      store: this.config.storeFactory.createCache(
+        this.extract(query.optimistic),
+      ),
       query: this.transformDocument(query.query),
       variables: query.variables,
       rootId: query.rootId,
@@ -94,6 +91,7 @@ export class InMemoryCache extends ApolloCache<NormalizedCacheObject> {
       result: write.result,
       variables: write.variables,
       document: this.transformDocument(write.query),
+      storeFactory: this.config.storeFactory,
       store: this.data,
       dataIdFromObject: this.config.dataIdFromObject,
       fragmentMatcherFunction: this.config.fragmentMatcher.match,
@@ -104,7 +102,9 @@ export class InMemoryCache extends ApolloCache<NormalizedCacheObject> {
 
   public diff<T>(query: Cache.DiffOptions): Cache.DiffResult<T> {
     return diffQueryAgainstStore({
-      store: this.config.storeFactory(this.extract(query.optimistic)),
+      store: this.config.storeFactory.createCache(
+        this.extract(query.optimistic),
+      ),
       query: this.transformDocument(query.query),
       variables: query.variables,
       returnPartialData: query.returnPartialData,
@@ -147,7 +147,7 @@ export class InMemoryCache extends ApolloCache<NormalizedCacheObject> {
     this.broadcastWatches();
   }
 
-  public performTransaction(transaction: Transaction<NormalizedCacheObject>) {
+  public performTransaction(transaction: Transaction<L>) {
     // TODO: does this need to be different, or is this okay for an in-memory cache?
 
     let alreadySilenced = this.silenceBroadcast;
@@ -164,20 +164,19 @@ export class InMemoryCache extends ApolloCache<NormalizedCacheObject> {
     this.broadcastWatches();
   }
 
-  public recordOptimisticTransaction(
-    transaction: Transaction<NormalizedCacheObject>,
-    id: string,
-  ) {
+  public recordOptimisticTransaction(transaction: Transaction<L>, id: string) {
     this.silenceBroadcast = true;
 
-    const patch = record(this.extract(true), recordingCache => {
-      // swapping data instance on 'this' is currently necessary
-      // because of the current architecture
-      const dataCache = this.data;
-      this.data = recordingCache;
-      this.performTransaction(transaction);
-      this.data = dataCache;
-    });
+    const patch = this.config.storeFactory
+      .createRecordingCache(this.extract(true))
+      .record(recordingCache => {
+        // swapping data instance on 'this' is currently necessary
+        // because of the current architecture
+        const dataCache = this.data;
+        this.data = recordingCache;
+        this.performTransaction(transaction);
+        this.data = dataCache;
+      });
 
     this.optimistic.push({
       id,

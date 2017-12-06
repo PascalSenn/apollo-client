@@ -27,15 +27,14 @@ import {
   getQueryDefinition,
 } from 'apollo-utilities';
 
-import { defaultNormalizedCacheFactory, ObjectCache } from './objectCache';
-
 import {
   IdGetter,
-  NormalizedCache,
-  NormalizedCacheFactory,
+  MemoryCache,
+  MemoryCacheFactory,
   ReadStoreContext,
   StoreObject,
 } from './types';
+import { ObjectCache } from './object-cache/objectCache';
 
 export class WriteError extends Error {
   public type = 'WriteError';
@@ -71,11 +70,11 @@ export function enhanceErrorWithDocument(error: Error, document: DocumentNode) {
  *
  * @param fragmentMatcherFunction A function to use for matching fragment conditions in GraphQL documents
  */
-export function writeQueryToStore({
+export function writeQueryToStore<T>({
   result,
   query,
-  storeFactory = defaultNormalizedCacheFactory,
-  store = storeFactory(),
+  storeFactory,
+  store = storeFactory.createCache(),
   variables,
   dataIdFromObject,
   fragmentMap = {} as FragmentMap,
@@ -83,13 +82,13 @@ export function writeQueryToStore({
 }: {
   result: Object;
   query: DocumentNode;
-  store?: NormalizedCache;
-  storeFactory?: NormalizedCacheFactory;
+  store?: MemoryCache<T>;
+  storeFactory: MemoryCacheFactory<T>;
   variables?: Object;
   dataIdFromObject?: IdGetter;
   fragmentMap?: FragmentMap;
   fragmentMatcherFunction?: FragmentMatcher;
-}): NormalizedCache {
+}): MemoryCache<T> {
   const queryDefinition: OperationDefinitionNode = getQueryDefinition(query);
 
   variables = assign({}, getDefaultValues(queryDefinition), variables);
@@ -99,7 +98,8 @@ export function writeQueryToStore({
       dataId: 'ROOT_QUERY',
       result,
       selectionSet: queryDefinition.selectionSet,
-      context: {
+      //TODO make nice
+      context: <any>{
         store,
         storeFactory,
         processedData: {},
@@ -114,9 +114,9 @@ export function writeQueryToStore({
   }
 }
 
-export type WriteContext = {
-  store: NormalizedCache;
-  storeFactory: NormalizedCacheFactory;
+export type WriteContext<T> = {
+  store: MemoryCache<T>;
+  storeFactory: MemoryCacheFactory<T>;
   processedData?: { [x: string]: FieldNode[] };
   variables?: any;
   dataIdFromObject?: IdGetter;
@@ -124,12 +124,12 @@ export type WriteContext = {
   fragmentMatcherFunction?: FragmentMatcher;
 };
 
-export function writeResultToStore({
+export function writeResultToStore<T>({
   dataId,
   result,
   document,
-  storeFactory = defaultNormalizedCacheFactory,
-  store = storeFactory(),
+  storeFactory,
+  store = storeFactory.createCache(),
   variables,
   dataIdFromObject,
   fragmentMatcherFunction,
@@ -137,12 +137,12 @@ export function writeResultToStore({
   dataId: string;
   result: any;
   document: DocumentNode;
-  store?: NormalizedCache;
-  storeFactory?: NormalizedCacheFactory;
+  store?: MemoryCache<T>;
+  storeFactory: MemoryCacheFactory<T>;
   variables?: Object;
   dataIdFromObject?: IdGetter;
   fragmentMatcherFunction?: FragmentMatcher;
-}): NormalizedCache {
+}): MemoryCache<T> {
   // XXX TODO REFACTOR: this is a temporary workaround until query normalization is made to work with documents.
   const operationDefinition = getOperationDefinition(document);
   const selectionSet = operationDefinition.selectionSet;
@@ -155,7 +155,8 @@ export function writeResultToStore({
       result,
       dataId,
       selectionSet,
-      context: {
+      // TODO: Make nice
+      context: <any>{
         store,
         storeFactory,
         processedData: {},
@@ -170,7 +171,7 @@ export function writeResultToStore({
   }
 }
 
-export function writeSelectionSetToStore({
+export function writeSelectionSetToStore<T>({
   result,
   dataId,
   selectionSet,
@@ -179,8 +180,8 @@ export function writeSelectionSetToStore({
   dataId: string;
   result: any;
   selectionSet: SelectionSetNode;
-  context: WriteContext;
-}): NormalizedCache {
+  context: WriteContext<T>;
+}): MemoryCache<T> {
   const { variables, store, fragmentMap } = context;
 
   selectionSet.selections.forEach(selection => {
@@ -282,10 +283,10 @@ function isGeneratedId(id: string): boolean {
   return id[0] === '$';
 }
 
-function mergeWithGenerated(
+function mergeWithGenerated<T>(
   generatedKey: string,
   realKey: string,
-  cache: NormalizedCache,
+  cache: MemoryCache<T>,
 ) {
   const generated = cache.get(generatedKey);
   const real = cache.get(realKey);
@@ -323,7 +324,7 @@ function isDataProcessed(
   return false;
 }
 
-function writeFieldToStore({
+function writeFieldToStore<T>({
   field,
   value,
   dataId,
@@ -332,7 +333,7 @@ function writeFieldToStore({
   field: FieldNode;
   value: any;
   dataId: string;
-  context: WriteContext;
+  context: WriteContext<T>;
 }) {
   const { variables, dataIdFromObject, store } = context;
 
@@ -457,11 +458,11 @@ function writeFieldToStore({
   }
 }
 
-function processArrayValue(
+function processArrayValue<T>(
   value: any[],
   generatedId: string,
   selectionSet: SelectionSetNode,
-  context: WriteContext,
+  context: WriteContext<T>,
 ): any[] {
   return value.map((item: any, index: any) => {
     if (item === null) {

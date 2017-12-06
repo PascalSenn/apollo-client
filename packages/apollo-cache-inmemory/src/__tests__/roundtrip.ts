@@ -9,6 +9,7 @@ import {
   HeuristicFragmentMatcher,
   writeQueryToStore,
   readQueryFromStore,
+  getObjectCacheFactory,
 } from '../';
 
 const fragmentMatcherFunction = new HeuristicFragmentMatcher().match;
@@ -16,6 +17,7 @@ const fragmentMatcherFunction = new HeuristicFragmentMatcher().match;
 function storeRoundtrip(query: DocumentNode, result: any, variables = {}) {
   const fragmentMap = createFragmentMap(getFragmentDefinitions(query));
   const store = writeQueryToStore({
+    storeFactory: getObjectCacheFactory(),
     result,
     query,
     variables,

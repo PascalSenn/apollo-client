@@ -4,7 +4,7 @@ import { toIdValue } from 'apollo-utilities';
 import { diffQueryAgainstStore, ID_KEY } from '../readFromStore';
 import { writeQueryToStore } from '../writeToStore';
 import { HeuristicFragmentMatcher } from '../fragmentMatcher';
-
+import { getObjectCacheFactory } from '../object-cache/objectCacheFactory';
 const fragmentMatcherFunction = new HeuristicFragmentMatcher().match;
 
 disableFragmentWarnings();
@@ -40,6 +40,8 @@ describe('diffing queries against the store', () => {
     };
 
     const store = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
+      storeFactory: getObjectCacheFactory(),
       result,
       query,
     });
@@ -74,6 +76,7 @@ describe('diffing queries against the store', () => {
     const getIdField = ({ id }: { id: string }) => id;
 
     const store = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       result,
       query: firstQuery,
       dataIdFromObject: getIdField,
@@ -112,6 +115,7 @@ describe('diffing queries against the store', () => {
       },
     };
     const store = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       result: firstResult,
       query: firstQuery,
     });
@@ -147,6 +151,7 @@ describe('diffing queries against the store', () => {
         },
       };
       const store = writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         result: firstResult,
         query: firstQuery,
       });
@@ -193,6 +198,7 @@ describe('diffing queries against the store', () => {
       },
     };
     const store = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       result: firstResult,
       query: firstQuery,
     });
@@ -240,6 +246,7 @@ describe('diffing queries against the store', () => {
       },
     };
     const store = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       result: firstResult,
       query: firstQuery,
     });
@@ -290,6 +297,7 @@ describe('diffing queries against the store', () => {
     };
 
     const store = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       result: firstResult,
       query: firstQuery,
     });
@@ -407,6 +415,7 @@ describe('diffing queries against the store', () => {
     };
 
     const store = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       query,
       result: queryResult,
       dataIdFromObject: ({ id }: { id: string }) => id,
@@ -453,6 +462,7 @@ describe('diffing queries against the store', () => {
       };
 
       const store = writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: queryResult,
       });
@@ -493,6 +503,7 @@ describe('diffing queries against the store', () => {
       };
 
       const store = writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: queryResult,
       });
@@ -539,6 +550,7 @@ describe('diffing queries against the store', () => {
       };
 
       const store = writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: queryResult,
       });
@@ -575,6 +587,7 @@ describe('diffing queries against the store', () => {
       };
 
       const store = writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: queryResult,
       });
@@ -618,6 +631,7 @@ describe('diffing queries against the store', () => {
       };
 
       const store = writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: queryResult,
       });
@@ -664,6 +678,7 @@ describe('diffing queries against the store', () => {
       };
 
       const store = writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: queryResult,
       });
@@ -737,6 +752,7 @@ describe('diffing queries against the store', () => {
       };
 
       const store = writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: queryResult,
         dataIdFromObject: ({ id }: { id: string }) => id,
@@ -803,6 +819,7 @@ describe('diffing queries against the store', () => {
       };
 
       const store = writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: queryResult,
       });
@@ -858,6 +875,7 @@ describe('diffing queries against the store', () => {
       const dataIdFromObject = (obj: any) => obj.id;
 
       const store = writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query: listQuery,
         result: listResult,
         dataIdFromObject,

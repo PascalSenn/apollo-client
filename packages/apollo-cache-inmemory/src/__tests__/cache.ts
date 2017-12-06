@@ -1,7 +1,12 @@
 import { ApolloCache } from 'apollo-cache';
 import gql, { disableFragmentWarnings } from 'graphql-tag';
 
-import { InMemoryCache, ApolloReducerConfig, NormalizedCache } from '..';
+import {
+  InMemoryCache,
+  ApolloReducerConfig,
+  ObjectCache,
+  NormalizedCacheObject,
+} from '..';
 
 disableFragmentWarnings();
 
@@ -12,9 +17,9 @@ describe('Cache', () => {
       config,
     }: {
       initialState?: any;
-      config?: ApolloReducerConfig;
+      config?: ApolloReducerConfig<NormalizedCacheObject>;
     } = {},
-  ): ApolloCache<NormalizedCache> {
+  ): ApolloCache<NormalizedCacheObject> {
     return new InMemoryCache(
       config || { addTypename: false },
       // XXX this is the old format. The tests need to be updated but since it is mapped down

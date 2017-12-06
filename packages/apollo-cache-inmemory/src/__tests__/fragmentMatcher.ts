@@ -1,5 +1,5 @@
 import { IntrospectionFragmentMatcher } from '../fragmentMatcher';
-import { defaultNormalizedCacheFactory } from '../objectCache';
+import { getObjectCacheFactory } from '../object-cache';
 
 describe('IntrospectionFragmentMatcher', () => {
   it('will throw an error if match is called if it is not ready', () => {
@@ -29,7 +29,7 @@ describe('IntrospectionFragmentMatcher', () => {
       },
     });
 
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       a: {
         __typename: 'ItemB',
       },
@@ -41,7 +41,7 @@ describe('IntrospectionFragmentMatcher', () => {
       generated: false,
     };
 
-    const readStoreContext = {
+    const readStoreContext: any = {
       store,
       returnPartialData: false,
       hasMissingField: false,

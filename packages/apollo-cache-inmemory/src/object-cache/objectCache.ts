@@ -1,6 +1,6 @@
-import { NormalizedCache, NormalizedCacheObject, StoreObject } from './types';
+import { MemoryCache, NormalizedCacheObject, StoreObject } from '../types';
 
-export class ObjectCache implements NormalizedCache {
+export class ObjectCache implements MemoryCache<NormalizedCacheObject> {
   constructor(private data: NormalizedCacheObject = {}) {}
   public toObject(): NormalizedCacheObject {
     return this.data;
@@ -24,6 +24,6 @@ export class ObjectCache implements NormalizedCache {
 
 export function defaultNormalizedCacheFactory(
   seed?: NormalizedCacheObject,
-): NormalizedCache {
+): MemoryCache<NormalizedCacheObject> {
   return new ObjectCache(seed);
 }

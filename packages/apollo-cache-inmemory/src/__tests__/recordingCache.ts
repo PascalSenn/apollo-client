@@ -1,17 +1,17 @@
-import { RecordingCache } from '../recordingCache';
+import { ObjectCacheRecording } from '../object-cache/ObjectCacheRecording';
 import { NormalizedCacheObject } from '../types';
 
-describe('RecordingCache', () => {
+describe('ObjectCacheRecording', () => {
   describe('returns correct values during recording', () => {
     const data = {
       Human: { __typename: 'Human', name: 'Mark' },
       Animal: { __typename: 'Mouse', name: '🐭' },
     };
     const dataToRecord = { Human: { __typename: 'Human', name: 'John' } };
-    let cache: RecordingCache;
+    let cache: ObjectCacheRecording;
 
     beforeEach(() => {
-      cache = new RecordingCache({ ...data });
+      cache = new ObjectCacheRecording({ ...data });
     });
 
     it('should passthrough values if not defined in recording', () => {
@@ -47,11 +47,11 @@ describe('RecordingCache', () => {
       Animal: { __typename: 'Mouse', name: '🐭' },
     };
     const dataToRecord = { Human: { __typename: 'Human', name: 'John' } };
-    let cache: RecordingCache;
+    let cache: ObjectCacheRecording;
     let recording: NormalizedCacheObject;
 
     beforeEach(() => {
-      cache = new RecordingCache({ ...data });
+      cache = new ObjectCacheRecording({ ...data });
       recording = cache.record(() => {
         cache.set('Human', dataToRecord.Human);
         cache.delete('Animal');

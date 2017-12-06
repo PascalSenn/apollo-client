@@ -2,9 +2,9 @@ import { assign, omit } from 'lodash';
 import { IdValue, JsonValue } from 'apollo-utilities';
 import gql from 'graphql-tag';
 
-import { NormalizedCache, StoreObject, HeuristicFragmentMatcher } from '../';
+import { MemoryCache, StoreObject, HeuristicFragmentMatcher } from '../';
 import { readQueryFromStore } from '../readFromStore';
-import { defaultNormalizedCacheFactory } from '../objectCache';
+import { getObjectCacheFactory } from '../object-cache';
 
 const fragmentMatcherFunction = new HeuristicFragmentMatcher().match;
 import { withError } from './diffAgainstStore';
@@ -12,7 +12,7 @@ import { withError } from './diffAgainstStore';
 describe('reading from the store', () => {
   it('runs a nested query with proper fragment fields in arrays', () => {
     withError(() => {
-      const store = defaultNormalizedCacheFactory({
+      const store = getObjectCacheFactory().createCache({
         ROOT_QUERY: {
           __typename: 'Query',
           nestedObj: { type: 'id', id: 'abcde', generated: false },
@@ -72,7 +72,7 @@ describe('reading from the store', () => {
   it('rejects malformed queries', () => {
     expect(() => {
       readQueryFromStore({
-        store: defaultNormalizedCacheFactory(),
+        store: getObjectCacheFactory().createCache(),
         query: gql`
           query {
             name
@@ -87,7 +87,7 @@ describe('reading from the store', () => {
 
     expect(() => {
       readQueryFromStore({
-        store: defaultNormalizedCacheFactory(),
+        store: getObjectCacheFactory().createCache(),
         query: gql`
           fragment x on y {
             name
@@ -105,7 +105,7 @@ describe('reading from the store', () => {
       nullField: null,
     } as StoreObject;
 
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       ROOT_QUERY: result,
     });
 
@@ -142,7 +142,7 @@ describe('reading from the store', () => {
       stringArg: 'This is a string!',
     };
 
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       ROOT_QUERY: {
         id: 'abcd',
         nullField: null,
@@ -183,7 +183,7 @@ describe('reading from the store', () => {
       floatArg: 3.14,
     };
 
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       ROOT_QUERY: {
         id: 'abcd',
         nullField: null,
@@ -220,7 +220,7 @@ describe('reading from the store', () => {
       } as StoreObject,
     };
 
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       ROOT_QUERY: assign({}, assign({}, omit(result, 'nestedObj')), {
         nestedObj: {
           type: 'id',
@@ -277,7 +277,7 @@ describe('reading from the store', () => {
       __typename: 'Item',
     };
 
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       ROOT_QUERY: assign(
         {},
         assign({}, omit(result, 'nestedObj', 'deepNestedObj')),
@@ -373,7 +373,7 @@ describe('reading from the store', () => {
       ] as StoreObject[],
     };
 
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       ROOT_QUERY: assign({}, assign({}, omit(result, 'nestedArray')), {
         nestedArray: [
           { type: 'id', generated: true, id: 'abcd.nestedArray.0' } as IdValue,
@@ -431,7 +431,7 @@ describe('reading from the store', () => {
       ] as StoreObject[],
     };
 
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       ROOT_QUERY: assign({}, assign({}, omit(result, 'nestedArray')), {
         nestedArray: [
           null,
@@ -486,7 +486,7 @@ describe('reading from the store', () => {
       ] as StoreObject[],
     };
 
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       ROOT_QUERY: assign({}, assign({}, omit(result, 'nestedArray')), {
         nestedArray: [null, { type: 'id', generated: false, id: 'abcde' }],
       }) as StoreObject,
@@ -531,7 +531,7 @@ describe('reading from the store', () => {
       nullField: null,
     } as StoreObject;
 
-    const store = defaultNormalizedCacheFactory({ ROOT_QUERY: result });
+    const store = getObjectCacheFactory().createCache({ ROOT_QUERY: result });
 
     expect(() => {
       readQueryFromStore({
@@ -555,7 +555,7 @@ describe('reading from the store', () => {
       nestedObj: null,
     };
 
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       ROOT_QUERY: assign({}, assign({}, omit(result, 'nestedObj')), {
         nestedObj: null,
       }) as StoreObject,
@@ -592,7 +592,7 @@ describe('reading from the store', () => {
       simpleArray: ['one', 'two', 'three'],
     };
 
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       ROOT_QUERY: assign({}, assign({}, omit(result, 'simpleArray')), {
         simpleArray: {
           type: 'json',
@@ -629,7 +629,7 @@ describe('reading from the store', () => {
       simpleArray: [null, 'two', 'three'],
     };
 
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       ROOT_QUERY: assign({}, assign({}, omit(result, 'simpleArray')), {
         simpleArray: {
           type: 'json',
@@ -678,7 +678,7 @@ describe('reading from the store', () => {
       __typename: 'Item',
     };
 
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       ROOT_QUERY: assign(
         {},
         assign({}, omit(data, 'nestedObj', 'deepNestedObj')),
@@ -749,7 +749,7 @@ describe('reading from the store', () => {
   });
 
   it('properly handles the connection directive', () => {
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       ROOT_QUERY: {
         abc: [
           {

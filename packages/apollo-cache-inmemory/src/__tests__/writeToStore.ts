@@ -21,12 +21,11 @@ import {
   writeSelectionSetToStore,
 } from '../writeToStore';
 
-import { defaultNormalizedCacheFactory } from '../objectCache';
+import { getObjectCacheFactory } from '../object-cache';
 
 import {
   HeuristicFragmentMatcher,
   IntrospectionFragmentMatcher,
-  NormalizedCache,
   StoreObject,
 } from '../';
 
@@ -65,6 +64,7 @@ describe('writing to the store', () => {
 
     expect(
       writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: cloneDeep(result),
       }).toObject(),
@@ -91,6 +91,7 @@ describe('writing to the store', () => {
     };
 
     const normalized = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       result,
       query,
     });
@@ -125,6 +126,7 @@ describe('writing to the store', () => {
     };
 
     const normalized = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       result,
       query,
     });
@@ -164,6 +166,7 @@ describe('writing to the store', () => {
     };
 
     const normalized = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       result,
       query,
       variables,
@@ -206,6 +209,7 @@ describe('writing to the store', () => {
     };
 
     const normalized = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       result,
       query,
       variables,
@@ -252,6 +256,7 @@ describe('writing to the store', () => {
 
     expect(
       writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: cloneDeep(result),
         dataIdFromObject: getIdField,
@@ -297,6 +302,7 @@ describe('writing to the store', () => {
 
     expect(
       writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: cloneDeep(result),
       }).toObject(),
@@ -341,6 +347,7 @@ describe('writing to the store', () => {
 
     expect(
       writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: cloneDeep(result),
       }).toObject(),
@@ -395,6 +402,7 @@ describe('writing to the store', () => {
 
     expect(
       writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: cloneDeep(result),
         dataIdFromObject: getIdField,
@@ -446,6 +454,7 @@ describe('writing to the store', () => {
 
     expect(
       writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: cloneDeep(result),
         dataIdFromObject: getIdField,
@@ -496,6 +505,7 @@ describe('writing to the store', () => {
     };
 
     const normalized = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       query,
       result: cloneDeep(result),
     });
@@ -543,6 +553,7 @@ describe('writing to the store', () => {
     };
 
     const normalized = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       query,
       result: cloneDeep(result),
     });
@@ -578,6 +589,7 @@ describe('writing to the store', () => {
     };
 
     const normalized = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       query,
       result: cloneDeep(result),
       dataIdFromObject: getIdField,
@@ -617,6 +629,7 @@ describe('writing to the store', () => {
     };
 
     const normalized = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       query,
       result: cloneDeep(result),
     });
@@ -663,6 +676,7 @@ describe('writing to the store', () => {
     };
 
     const normalized = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       query,
       result: cloneDeep(result),
       dataIdFromObject: getIdField,
@@ -738,6 +752,7 @@ describe('writing to the store', () => {
     };
 
     const normalized = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       query,
       result: cloneDeep(result),
       dataIdFromObject: getIdField,
@@ -828,6 +843,7 @@ describe('writing to the store', () => {
     };
 
     const normalized = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       query,
       result: cloneDeep(result),
       dataIdFromObject: getIdField,
@@ -891,6 +907,7 @@ describe('writing to the store', () => {
     };
 
     const store = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       query,
       result: cloneDeep(result),
       dataIdFromObject: getIdField,
@@ -911,6 +928,7 @@ describe('writing to the store', () => {
     };
 
     const store2 = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       store,
       query: query2,
       result: result2,
@@ -948,6 +966,7 @@ describe('writing to the store', () => {
 
     expect(
       writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: cloneDeep(result),
       }).toObject(),
@@ -977,6 +996,7 @@ describe('writing to the store', () => {
 
     expect(
       writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         query,
         result: cloneDeep(result),
       }).toObject(),
@@ -1148,8 +1168,7 @@ describe('writing to the store', () => {
             selectionSet: def.selectionSet,
             result: cloneDeep(result),
             context: {
-              storeFactory: defaultNormalizedCacheFactory,
-              store: defaultNormalizedCacheFactory(),
+              store: getObjectCacheFactory().createCache(),
               variables,
               dataIdFromObject: () => '5',
             },
@@ -1198,7 +1217,7 @@ describe('writing to the store', () => {
           lastName: 'Smith',
         },
       };
-      const expStore = defaultNormalizedCacheFactory({
+      const expStore = getObjectCacheFactory().createCache({
         ROOT_QUERY: {
           author: {
             type: 'id',
@@ -1210,6 +1229,7 @@ describe('writing to the store', () => {
       });
       expect(
         writeQueryToStore({
+          storeFactory: getObjectCacheFactory(),
           result: data,
           query,
         }).toObject(),
@@ -1233,7 +1253,7 @@ describe('writing to the store', () => {
           __typename: 'Author',
         },
       };
-      const expStore = defaultNormalizedCacheFactory({
+      const expStore = getObjectCacheFactory().createCache({
         ROOT_QUERY: {
           author: {
             type: 'id',
@@ -1249,6 +1269,7 @@ describe('writing to the store', () => {
       });
       expect(
         writeQueryToStore({
+          storeFactory: getObjectCacheFactory(),
           result: data,
           query,
           dataIdFromObject,
@@ -1275,7 +1296,7 @@ describe('writing to the store', () => {
           __typename: 'Author',
         },
       };
-      const expStore = defaultNormalizedCacheFactory({
+      const expStore = getObjectCacheFactory().createCache({
         ROOT_QUERY: {
           author: {
             type: 'id',
@@ -1294,6 +1315,7 @@ describe('writing to the store', () => {
       });
       expect(
         writeQueryToStore({
+          storeFactory: getObjectCacheFactory(),
           result: data,
           query,
           dataIdFromObject,
@@ -1340,7 +1362,7 @@ describe('writing to the store', () => {
         }
       }
     `;
-    const expStoreWithoutId = defaultNormalizedCacheFactory({
+    const expStoreWithoutId = getObjectCacheFactory().createCache({
       '$ROOT_QUERY.author': {
         firstName: 'John',
         lastName: 'Smith',
@@ -1353,7 +1375,7 @@ describe('writing to the store', () => {
         },
       },
     });
-    const expStoreWithId = defaultNormalizedCacheFactory({
+    const expStoreWithId = getObjectCacheFactory().createCache({
       Author__129: {
         firstName: 'John',
         lastName: 'Smith',
@@ -1369,12 +1391,14 @@ describe('writing to the store', () => {
       },
     });
     const storeWithoutId = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       result: dataWithoutId,
       query: queryWithoutId,
       dataIdFromObject,
     });
     expect(storeWithoutId.toObject()).toEqual(expStoreWithoutId.toObject());
     const storeWithId = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       result: dataWithId,
       query: queryWithId,
       store: storeWithoutId,
@@ -1395,6 +1419,7 @@ describe('writing to the store', () => {
     };
     expect(() => {
       writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         result,
         query,
       });
@@ -1418,14 +1443,16 @@ describe('writing to the store', () => {
       nullField: null,
     };
     const store = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       query,
       result: cloneDeep(result),
     });
 
     const newStore = writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       query,
       result: cloneDeep(result),
-      store: defaultNormalizedCacheFactory(store.toObject()),
+      store: getObjectCacheFactory().createCache(store.toObject()),
     });
 
     Object.keys(store.toObject()).forEach(field => {
@@ -1455,6 +1482,7 @@ describe('writing to the store', () => {
       };
 
       const newStore = writeResultToStore({
+        storeFactory: getObjectCacheFactory(),
         dataId: 'ROOT_QUERY',
         result,
         document: query,
@@ -1478,6 +1506,7 @@ describe('writing to the store', () => {
 
       return withWarning(() => {
         const newStore = writeResultToStore({
+          storeFactory: getObjectCacheFactory(),
           dataId: 'ROOT_QUERY',
           result,
           document: query,
@@ -1543,6 +1572,7 @@ describe('writing to the store', () => {
 
       return withWarning(() => {
         const newStore = writeResultToStore({
+          storeFactory: getObjectCacheFactory(),
           dataId: 'ROOT_QUERY',
           result,
           document: queryWithInterface,
@@ -1569,6 +1599,7 @@ describe('writing to the store', () => {
 
       return withWarning(() => {
         const newStore = writeResultToStore({
+          storeFactory: getObjectCacheFactory(),
           dataId: 'ROOT_QUERY',
           result,
           document: addTypenameToDocument(query),
@@ -1586,6 +1617,7 @@ describe('writing to the store', () => {
       };
 
       const newStore = writeResultToStore({
+        storeFactory: getObjectCacheFactory(),
         dataId: 'ROOT_QUERY',
         result,
         document: query,
@@ -1609,6 +1641,7 @@ describe('writing to the store', () => {
 
       const fragmentMatcherFunction = new HeuristicFragmentMatcher().match;
       const newStore = writeResultToStore({
+        storeFactory: getObjectCacheFactory(),
         dataId: 'ROOT_QUERY',
         result,
         document: defered,
@@ -1623,7 +1656,7 @@ describe('writing to the store', () => {
   });
 
   it('throws when trying to write an object without id that was previously queried with id', () => {
-    const store = defaultNormalizedCacheFactory({
+    const store = getObjectCacheFactory().createCache({
       ROOT_QUERY: assign(
         {},
         {
@@ -1647,6 +1680,7 @@ describe('writing to the store', () => {
 
     expect(() => {
       writeQueryToStore({
+        storeFactory: getObjectCacheFactory(),
         store,
         result: {
           item: {
@@ -1667,6 +1701,7 @@ describe('writing to the store', () => {
 
     expect(() => {
       writeResultToStore({
+        storeFactory: getObjectCacheFactory(),
         store,
         result: {
           item: {
@@ -1688,9 +1723,10 @@ describe('writing to the store', () => {
   });
 
   it('properly handles the connection directive', () => {
-    const store = defaultNormalizedCacheFactory();
+    const store = getObjectCacheFactory().createCache();
 
     writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       query: gql`
         {
           books(skip: 0, limit: 2) @connection(key: "abc") {
@@ -1709,6 +1745,7 @@ describe('writing to the store', () => {
     });
 
     writeQueryToStore({
+      storeFactory: getObjectCacheFactory(),
       query: gql`
         {
           books(skip: 2, limit: 4) @connection(key: "abc") {

@@ -44,8 +44,8 @@ export const ID_KEY = typeof Symbol !== 'undefined' ? Symbol('id') : '@@id';
  * If nothing in the store changed since that previous result then values from the previous result
  * will be returned to preserve referential equality.
  */
-export function readQueryFromStore<QueryType>(
-  options: ReadQueryOptions,
+export function readQueryFromStore<QueryType, T>(
+  options: ReadQueryOptions<T>,
 ): QueryType {
   const optsPatch = { returnPartialData: false };
 

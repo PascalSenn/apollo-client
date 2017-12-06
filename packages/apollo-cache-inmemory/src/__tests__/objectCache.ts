@@ -1,4 +1,4 @@
-import { ObjectCache } from '../objectCache';
+import { ObjectCache } from '../object-cache';
 import { NormalizedCacheObject } from '../types';
 
 describe('ObjectCache', () => {
