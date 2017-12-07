@@ -2,8 +2,12 @@ import { MemoryCache, StoreObject } from '../types';
 
 export class MapCache implements MemoryCache<Map<string, StoreObject>> {
   public cache: Map<string, StoreObject>;
-  constructor(data: object = {}) {
-    this.cache = new Map(Object.entries(data));
+  constructor(data: object | Map<string, StoreObject> = {}) {
+    if (data instanceof Map) {
+      this.cache = data;
+    } else {
+      this.cache = new Map(Object.entries(data));
+    }
   }
   public get(dataId: string): StoreObject {
     return this.cache.get(`${dataId}`);
@@ -28,9 +32,6 @@ export class MapCache implements MemoryCache<Map<string, StoreObject>> {
     return obj;
   }
   public replace(newData: Map<string, StoreObject>): void {
-    this.cache.clear();
-    Object.entries(newData).forEach(([dataId, value]) =>
-      this.cache.set(dataId, value),
-    );
+    this.cache = newData;
   }
 }

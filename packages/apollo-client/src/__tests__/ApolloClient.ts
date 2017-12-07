@@ -561,7 +561,7 @@ describe('ApolloClient', () => {
         `,
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 1,
         },
@@ -577,7 +577,7 @@ describe('ApolloClient', () => {
         `,
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 1,
           b: 2,
@@ -596,7 +596,7 @@ describe('ApolloClient', () => {
         `,
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 4,
           b: 5,
@@ -623,7 +623,7 @@ describe('ApolloClient', () => {
         `,
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 1,
           d: {
@@ -652,7 +652,7 @@ describe('ApolloClient', () => {
         `,
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 1,
           d: {
@@ -713,7 +713,7 @@ describe('ApolloClient', () => {
         `,
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 1,
           b: 2,
@@ -767,7 +767,7 @@ describe('ApolloClient', () => {
         },
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           'field({"literal":true,"value":42})': 1,
           'field({"literal":false,"value":42})': 2,
@@ -810,7 +810,7 @@ describe('ApolloClient', () => {
         },
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           'field({"literal":true,"value":42})': 2,
           'field({"literal":false,"value":-1})': 1,
@@ -955,7 +955,7 @@ describe('ApolloClient', () => {
         `,
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         foo: {
           __typename: 'Foo',
           e: 4,
@@ -991,7 +991,7 @@ describe('ApolloClient', () => {
         `,
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         foo: {
           __typename: 'Foo',
           e: 4,
@@ -1021,7 +1021,7 @@ describe('ApolloClient', () => {
         `,
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         foo: {
           __typename: 'Foo',
           e: 4,
@@ -1052,7 +1052,7 @@ describe('ApolloClient', () => {
         `,
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         foo: {
           __typename: 'Foo',
           e: 4,
@@ -1102,7 +1102,7 @@ describe('ApolloClient', () => {
         fragmentName: 'fooFragment',
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         foo: {
           __typename: 'Foo',
           e: 4,
@@ -1146,7 +1146,7 @@ describe('ApolloClient', () => {
         fragmentName: 'barFragment',
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         foo: {
           __typename: 'Foo',
           e: 4,
@@ -1192,7 +1192,7 @@ describe('ApolloClient', () => {
         },
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         foo: {
           __typename: 'Foo',
           'field({"literal":true,"value":42})': 1,
@@ -1456,7 +1456,7 @@ describe('ApolloClient', () => {
         bar: { __typename: 'Bar', d: 8, e: 9, f: 6 },
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         foo: {
           __typename: 'Foo',
           a: 7,
@@ -1542,7 +1542,7 @@ describe('ApolloClient', () => {
         },
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 1,
           b: 2,
@@ -1625,7 +1625,7 @@ describe('ApolloClient', () => {
         },
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 1,
           b: 2,
@@ -1733,7 +1733,7 @@ describe('ApolloClient', () => {
         },
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 1,
           b: 2,
@@ -1817,7 +1817,7 @@ describe('ApolloClient', () => {
         },
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 1,
           b: 2,
@@ -1880,7 +1880,7 @@ describe('ApolloClient', () => {
         },
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 1,
           b: 2,
@@ -1940,7 +1940,7 @@ describe('ApolloClient', () => {
         },
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 1,
           b: 2,
@@ -1998,7 +1998,7 @@ describe('ApolloClient', () => {
         },
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 1,
           b: 2,
@@ -2083,7 +2083,7 @@ describe('ApolloClient', () => {
         },
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 1,
           b: 2,
@@ -2193,7 +2193,7 @@ describe('ApolloClient', () => {
         },
       });
 
-      expect((client.cache as InMemoryCache).extract()).toEqual({
+      expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
         ROOT_QUERY: {
           a: 1,
           b: 2,

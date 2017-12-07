@@ -4,16 +4,22 @@ import { MapCacheRecording } from './mapCacheRecording';
 
 export class MapCacheFactory
   implements MemoryCacheFactory<Map<string, StoreObject>> {
-  public createCache(seed: object = {}): MapCache {
+  public createCache(seed: object | Map<string, StoreObject> = {}): MapCache {
     return new MapCache(seed);
   }
-  public createRecordingCache(seed: object = {}): MapCacheRecording {
+  public createRecordingCache(
+    seed: object | Map<string, StoreObject> = {},
+  ): MapCacheRecording {
     return new MapCacheRecording(seed);
   }
   public concatCaches(
     ...caches: Map<string, StoreObject>[]
   ): Map<string, StoreObject> {
-    return new Map(...caches);
+    let map: Map<string, StoreObject> = new Map();
+    for (const cache of caches) {
+      cache.forEach((v, k) => map.set(k, v));
+    }
+    return map;
   }
 }
 

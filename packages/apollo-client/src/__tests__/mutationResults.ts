@@ -865,7 +865,7 @@ describe('mutation results', () => {
       }),
     ])
       .then(() => {
-        expect((client.cache as InMemoryCache).extract()).toEqual({
+        expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
           ROOT_MUTATION: {
             'result({"a":1,"b":2})': 'hello',
             'result({"a":1,"c":3})': 'world',
@@ -942,7 +942,7 @@ describe('mutation results', () => {
       }),
     ])
       .then(() => {
-        expect((client.cache as InMemoryCache).extract()).toEqual({
+        expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
           ROOT_MUTATION: {
             'result({"a":1,"b":"water"})': 'hello',
             'result({"a":2,"b":"cheese","c":3})': 'world',
@@ -1019,7 +1019,7 @@ describe('mutation results', () => {
       }),
     ])
       .then(() => {
-        expect((client.cache as InMemoryCache).extract()).toEqual({
+        expect((client.cache as InMemoryCache).data.forceToObject()).toEqual({
           ROOT_MUTATION: {
             'result({"a":1,"b":2,"c":null})': 'hello',
             'result({"a":1,"b":null,"c":3})': 'world',

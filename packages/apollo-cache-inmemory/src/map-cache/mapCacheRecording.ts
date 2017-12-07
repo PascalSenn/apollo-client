@@ -17,12 +17,7 @@ export class MapCacheRecording
   }
 
   public toObject(): Map<string, StoreObject> {
-    return new Map(
-      (function*() {
-        yield* this.data;
-        yield* this.recordedData;
-      })(),
-    );
+    return { ...this.data, ...this.recordedData };
   }
 
   public get(dataId: string): StoreObject {

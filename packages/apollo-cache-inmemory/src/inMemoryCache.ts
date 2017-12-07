@@ -11,13 +11,14 @@ import { HeuristicFragmentMatcher } from './fragmentMatcher';
 import { OptimisticStoreItem, ApolloReducerConfig, MemoryCache } from './types';
 import { writeResultToStore } from './writeToStore';
 import { readQueryFromStore, diffQueryAgainstStore } from './readFromStore';
-import { getObjectCacheFactory } from './object-cache/objectCacheFactory';
+// import { getObjectCacheFactory } from './object-cache/objectCacheFactory';
+import { getMapCacheFactory } from './map-cache/mapCacheFactory';
 
 const defaultConfig = {
   fragmentMatcher: new HeuristicFragmentMatcher(),
   dataIdFromObject: defaultDataIdFromObject,
   addTypename: true,
-  storeFactory: getObjectCacheFactory(),
+  storeFactory: getMapCacheFactory(),
 };
 
 export function defaultDataIdFromObject(result: any): string | null {
@@ -61,7 +62,6 @@ export class InMemoryCache<L> extends ApolloCache<L> {
   public extract(optimistic: boolean = false): L {
     if (optimistic && this.optimistic.length > 0) {
       const patches = this.optimistic.map(opt => opt.data);
-
       return this.config.storeFactory.concatCaches(
         this.data.toObject(),
         ...patches,
