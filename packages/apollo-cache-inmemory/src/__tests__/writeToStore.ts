@@ -67,7 +67,7 @@ describe('writing to the store', () => {
         storeFactory: getObjectCacheFactory(),
         query,
         result: cloneDeep(result),
-      }).toObject(),
+      }).forceToObject(),
     ).toEqual({
       ROOT_QUERY: result,
     });
@@ -96,7 +96,7 @@ describe('writing to the store', () => {
       query,
     });
 
-    expect(normalized.toObject()).toEqual({
+    expect(normalized.forceToObject()).toEqual({
       ROOT_QUERY: {
         id: 'abcd',
         stringField: 'This is a string!',
@@ -131,7 +131,7 @@ describe('writing to the store', () => {
       query,
     });
 
-    expect(normalized.toObject()).toEqual({
+    expect(normalized.forceToObject()).toEqual({
       ROOT_QUERY: {
         id: 'abcd',
         'stringField({"arg":1})': 'The arg was 1!',
@@ -172,7 +172,7 @@ describe('writing to the store', () => {
       variables,
     });
 
-    expect(normalized.toObject()).toEqual({
+    expect(normalized.forceToObject()).toEqual({
       ROOT_QUERY: {
         id: 'abcd',
         nullField: null,
@@ -215,7 +215,7 @@ describe('writing to the store', () => {
       variables,
     });
 
-    expect(normalized.toObject()).toEqual({
+    expect(normalized.forceToObject()).toEqual({
       ROOT_QUERY: {
         id: 'abcd',
         nullField: null,
@@ -260,7 +260,7 @@ describe('writing to the store', () => {
         query,
         result: cloneDeep(result),
         dataIdFromObject: getIdField,
-      }).toObject(),
+      }).forceToObject(),
     ).toEqual({
       ROOT_QUERY: assign<{}>({}, assign({}, omit(result, 'nestedObj')), {
         nestedObj: {
@@ -305,7 +305,7 @@ describe('writing to the store', () => {
         storeFactory: getObjectCacheFactory(),
         query,
         result: cloneDeep(result),
-      }).toObject(),
+      }).forceToObject(),
     ).toEqual({
       ROOT_QUERY: assign({}, assign({}, omit(result, 'nestedObj')), {
         nestedObj: {
@@ -350,7 +350,7 @@ describe('writing to the store', () => {
         storeFactory: getObjectCacheFactory(),
         query,
         result: cloneDeep(result),
-      }).toObject(),
+      }).forceToObject(),
     ).toEqual({
       ROOT_QUERY: assign({}, assign({}, omit(result, 'nestedObj')), {
         'nestedObj({"arg":"val"})': {
@@ -406,7 +406,7 @@ describe('writing to the store', () => {
         query,
         result: cloneDeep(result),
         dataIdFromObject: getIdField,
-      }).toObject(),
+      }).forceToObject(),
     ).toEqual({
       ROOT_QUERY: assign({}, assign({}, omit(result, 'nestedArray')), {
         nestedArray: result.nestedArray.map((obj: any) => ({
@@ -458,7 +458,7 @@ describe('writing to the store', () => {
         query,
         result: cloneDeep(result),
         dataIdFromObject: getIdField,
-      }).toObject(),
+      }).forceToObject(),
     ).toEqual({
       ROOT_QUERY: assign<{}>({}, assign({}, omit(result, 'nestedArray')), {
         nestedArray: [
@@ -510,7 +510,7 @@ describe('writing to the store', () => {
       result: cloneDeep(result),
     });
 
-    expect(normalized.toObject()).toEqual({
+    expect(normalized.forceToObject()).toEqual({
       ROOT_QUERY: assign({}, assign({}, omit(result, 'nestedArray')), {
         nestedArray: [
           { type: 'id', generated: true, id: `ROOT_QUERY.nestedArray.0` },
@@ -558,7 +558,7 @@ describe('writing to the store', () => {
       result: cloneDeep(result),
     });
 
-    expect(normalized.toObject()).toEqual({
+    expect(normalized.forceToObject()).toEqual({
       ROOT_QUERY: assign({}, assign({}, omit(result, 'nestedArray')), {
         nestedArray: [
           null,
@@ -595,7 +595,7 @@ describe('writing to the store', () => {
       dataIdFromObject: getIdField,
     });
 
-    expect(normalized.toObject()).toEqual({
+    expect(normalized.forceToObject()).toEqual({
       ROOT_QUERY: assign<{}>({}, assign({}, omit(result, 'simpleArray')), {
         simpleArray: {
           type: 'json',
@@ -634,7 +634,7 @@ describe('writing to the store', () => {
       result: cloneDeep(result),
     });
 
-    expect(normalized.toObject()).toEqual({
+    expect(normalized.forceToObject()).toEqual({
       ROOT_QUERY: assign<{}>({}, assign({}, omit(result, 'simpleArray')), {
         simpleArray: {
           type: 'json',
@@ -682,7 +682,7 @@ describe('writing to the store', () => {
       dataIdFromObject: getIdField,
     });
 
-    expect(normalized.toObject()).toEqual({
+    expect(normalized.forceToObject()).toEqual({
       ROOT_QUERY: {
         id: 'a',
         object1: {
@@ -758,7 +758,7 @@ describe('writing to the store', () => {
       dataIdFromObject: getIdField,
     });
 
-    expect(normalized.toObject()).toEqual({
+    expect(normalized.forceToObject()).toEqual({
       ROOT_QUERY: {
         id: 'a',
         array1: [
@@ -849,7 +849,7 @@ describe('writing to the store', () => {
       dataIdFromObject: getIdField,
     });
 
-    expect(normalized.toObject()).toEqual({
+    expect(normalized.forceToObject()).toEqual({
       ROOT_QUERY: {
         id: 'a',
         array1: [
@@ -935,7 +935,7 @@ describe('writing to the store', () => {
       dataIdFromObject: getIdField,
     });
 
-    expect(store2.toObject()).toEqual({
+    expect(store2.forceToObject()).toEqual({
       ROOT_QUERY: assign({}, result, result2),
     });
   });
@@ -969,7 +969,7 @@ describe('writing to the store', () => {
         storeFactory: getObjectCacheFactory(),
         query,
         result: cloneDeep(result),
-      }).toObject(),
+      }).forceToObject(),
     ).toEqual({
       ROOT_QUERY: assign({}, assign({}, omit(result, 'nestedObj')), {
         nestedObj: null,
@@ -999,7 +999,7 @@ describe('writing to the store', () => {
         storeFactory: getObjectCacheFactory(),
         query,
         result: cloneDeep(result),
-      }).toObject(),
+      }).forceToObject(),
     ).toEqual({
       ROOT_QUERY: {
         'people_one({"id":"5"})': {
@@ -1172,7 +1172,7 @@ describe('writing to the store', () => {
               variables,
               dataIdFromObject: () => '5',
             },
-          }).toObject(),
+          }).forceToObject(),
         ).toEqual({
           '5': {
             'some_mutation({"input":{"id":"5","arr":[1,{"a":"b"}],"obj":{"a":"b"},"num":5.5,"nil":null,"bo":true}})': {
@@ -1232,8 +1232,8 @@ describe('writing to the store', () => {
           storeFactory: getObjectCacheFactory(),
           result: data,
           query,
-        }).toObject(),
-      ).toEqual(expStore.toObject());
+        }).forceToObject(),
+      ).toEqual(expStore.forceToObject());
     });
 
     it('should correctly escape real ids', () => {
@@ -1273,8 +1273,8 @@ describe('writing to the store', () => {
           result: data,
           query,
           dataIdFromObject,
-        }).toObject(),
-      ).toEqual(expStore.toObject());
+        }).forceToObject(),
+      ).toEqual(expStore.forceToObject());
     });
 
     it('should correctly escape json blobs', () => {
@@ -1319,8 +1319,8 @@ describe('writing to the store', () => {
           result: data,
           query,
           dataIdFromObject,
-        }).toObject(),
-      ).toEqual(expStore.toObject());
+        }).forceToObject(),
+      ).toEqual(expStore.forceToObject());
     });
   });
 
@@ -1396,7 +1396,9 @@ describe('writing to the store', () => {
       query: queryWithoutId,
       dataIdFromObject,
     });
-    expect(storeWithoutId.toObject()).toEqual(expStoreWithoutId.toObject());
+    expect(storeWithoutId.forceToObject()).toEqual(
+      expStoreWithoutId.forceToObject(),
+    );
     const storeWithId = writeQueryToStore({
       storeFactory: getObjectCacheFactory(),
       result: dataWithId,
@@ -1404,7 +1406,7 @@ describe('writing to the store', () => {
       store: storeWithoutId,
       dataIdFromObject,
     });
-    expect(storeWithId.toObject()).toEqual(expStoreWithId.toObject());
+    expect(storeWithId.forceToObject()).toEqual(expStoreWithId.forceToObject());
   });
 
   it('does not swallow errors other than field errors', () => {
@@ -1452,10 +1454,10 @@ describe('writing to the store', () => {
       storeFactory: getObjectCacheFactory(),
       query,
       result: cloneDeep(result),
-      store: getObjectCacheFactory().createCache(store.toObject()),
+      store: getObjectCacheFactory().createCache(store.forceToObject()),
     });
 
-    Object.keys(store.toObject()).forEach(field => {
+    Object.keys(store.forceToObject()).forEach(field => {
       expect(store.get(field)).toEqual(newStore.get(field));
     });
   });
@@ -1763,7 +1765,7 @@ describe('writing to the store', () => {
       store,
     });
 
-    expect(store.toObject()).toEqual({
+    expect(store.forceToObject()).toEqual({
       ROOT_QUERY: {
         abc: [
           {

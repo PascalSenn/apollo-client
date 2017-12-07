@@ -61,7 +61,11 @@ export class InMemoryCache<L> extends ApolloCache<L> {
   public extract(optimistic: boolean = false): L {
     if (optimistic && this.optimistic.length > 0) {
       const patches = this.optimistic.map(opt => opt.data);
-      return Object.assign({}, this.data.toObject(), ...patches);
+
+      return this.config.storeFactory.concatCaches(
+        this.data.toObject(),
+        ...patches,
+      );
     }
 
     return this.data.toObject();

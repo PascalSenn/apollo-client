@@ -41,7 +41,6 @@ describe('diffing queries against the store', () => {
 
     const store = writeQueryToStore({
       storeFactory: getObjectCacheFactory(),
-      storeFactory: getObjectCacheFactory(),
       result,
       query,
     });

@@ -20,6 +20,9 @@ export class ObjectCache implements MemoryCache<NormalizedCacheObject> {
   public replace(newData: NormalizedCacheObject): void {
     this.data = newData || {};
   }
+  public forceToObject(): object {
+    return this.data;
+  }
 }
 
 export function defaultNormalizedCacheFactory(

@@ -1,8 +1,8 @@
-jest.mock('../objectCache', () => {
-  const { MapCache, mapNormalizedCacheFactory } = require('../mapCache');
+jest.mock('../object-cache', () => {
+  const { MapCache, getMapCacheFactory } = require('../map-cache');
   return {
     ObjectCache: MapCache,
-    defaultNormalizedCacheFactory: mapNormalizedCacheFactory,
+    getObjectCacheFactory: getMapCacheFactory,
   };
 });
 

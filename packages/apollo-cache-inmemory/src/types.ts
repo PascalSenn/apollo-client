@@ -17,9 +17,13 @@ export interface MemoryCache<T> {
 
   // non-Map elements:
   /**
-   * returns an Object with key-value pairs matching the contents of the store
+   * returns the whole cache as T
    */
   toObject(): T;
+  /**
+   * returns an Object with key-value pairs matching the contents of the store
+   */
+  forceToObject(): object;
   /**
    * replace the state of the store
    */
@@ -32,10 +36,9 @@ export interface MemoryCacheRecording<T> extends MemoryCache<T> {
  * This is a normalized representation of the Apollo query result cache. It consists of
  * a flattened representation of query result trees.
  */
-export interface NormalizedCacheObject extends BaseCacheObject {
+export interface NormalizedCacheObject {
   [dataId: string]: StoreObject;
 }
-export interface BaseCacheObject {}
 
 export interface StoreObject {
   __typename?: string;
@@ -43,14 +46,15 @@ export interface StoreObject {
 }
 
 export interface MemoryCacheFactory<T> {
-  createCache(seed?: T): MemoryCache<T>;
-  createRecordingCache(seed?: T): MemoryCacheRecording<T>;
+  createCache(seed?: any): MemoryCache<T>;
+  createRecordingCache(seed?: any): MemoryCacheRecording<T>;
+  concatCaches(...caches: T[]): T;
 }
 
 export type OptimisticStoreItem = {
   id: string;
-  data: BaseCacheObject;
-  transaction: Transaction<BaseCacheObject>;
+  data: any;
+  transaction: Transaction<any>;
 };
 
 export type ReadQueryOptions<T> = {

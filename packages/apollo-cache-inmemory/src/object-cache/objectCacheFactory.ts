@@ -12,6 +12,11 @@ export class ObjectCacheFactory
   ): ObjectCacheRecording {
     return new ObjectCacheRecording(seed);
   }
+  public concatCaches(
+    ...caches: NormalizedCacheObject[]
+  ): NormalizedCacheObject {
+    return Object.assign({}, ...caches);
+  }
 }
 
 export function getObjectCacheFactory(): ObjectCacheFactory {

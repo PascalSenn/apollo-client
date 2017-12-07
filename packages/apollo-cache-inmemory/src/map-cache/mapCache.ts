@@ -1,12 +1,8 @@
-/**import { MemoryCache, NormalizedCacheObject, StoreObject } from './types';
+import { MemoryCache, StoreObject } from '../types';
 
-
- * A Map-based implementation of the NormalizedCache.
- * Note that you need a polyfill for Object.entries for this to work.
-
-export class MapCache implements NormalizedCache {
+export class MapCache implements MemoryCache<Map<string, StoreObject>> {
   public cache: Map<string, StoreObject>;
-  constructor(data: NormalizedCacheObject = {}) {
+  constructor(data: object = {}) {
     this.cache = new Map(Object.entries(data));
   }
   public get(dataId: string): StoreObject {
@@ -21,24 +17,20 @@ export class MapCache implements NormalizedCache {
   public clear(): void {
     return this.cache.clear();
   }
-  public toObject(): NormalizedCacheObject {
-    const obj: NormalizedCacheObject = {};
+  public toObject(): Map<string, StoreObject> {
+    return this.cache;
+  }
+  public forceToObject(): object {
+    const obj: any = {};
     this.cache.forEach((dataId, key) => {
       obj[key] = dataId;
     });
     return obj;
   }
-  public replace(newData: NormalizedCacheObject): void {
+  public replace(newData: Map<string, StoreObject>): void {
     this.cache.clear();
     Object.entries(newData).forEach(([dataId, value]) =>
       this.cache.set(dataId, value),
     );
   }
 }
-
-export function mapNormalizedCacheFactory(
-  seed?: NormalizedCacheObject,
-): NormalizedCache {
-  return new MapCache(seed);
-}
-**/

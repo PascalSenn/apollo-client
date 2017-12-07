@@ -45,4 +45,7 @@ export class ObjectCacheRecording
     this.clear();
     this.recordedData = { ...newData };
   }
+  public forceToObject(): object {
+    return this.toObject();
+  }
 }
