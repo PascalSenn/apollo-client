@@ -2,7 +2,6 @@ import { DocumentNode } from 'graphql';
 import { FragmentMatcher } from 'graphql-anywhere';
 import { Transaction } from 'apollo-cache';
 import { IdValue, StoreValue } from 'apollo-utilities';
-import { NormalizedCacheObject, NormalizedCache } from './types';
 
 export type IdGetter = (value: Object) => string | null | undefined;
 
@@ -68,7 +67,7 @@ export type ApolloReducerConfig = {
   dataIdFromObject?: IdGetter;
   fragmentMatcher?: FragmentMatcherInterface;
   addTypename?: boolean;
-  cacheResolvers?: CacheResolverMap;
+  cacheRedirects?: CacheResolverMap;
   storeFactory?: NormalizedCacheFactory;
 };
 
@@ -76,7 +75,8 @@ export type ReadStoreContext = {
   store: NormalizedCache;
   returnPartialData: boolean;
   hasMissingField: boolean;
-  cacheResolvers: CacheResolverMap;
+  cacheRedirects: CacheResolverMap;
+  dataIdFromObject?: IdGetter;
 };
 
 export interface FragmentMatcherInterface {
@@ -110,21 +110,20 @@ export interface IdValueWithPreviousResult extends IdValue {
 
 export type IntrospectionResultData = {
   __schema: {
-    types: [
-      {
-        kind: string;
+    types: {
+      kind: string;
+      name: string;
+      possibleTypes: {
         name: string;
-        possibleTypes: {
-          name: string;
-        }[];
-      }
-    ];
+      }[];
+    }[];
   };
 };
 
 export type CacheResolver = (
   rootValue: any,
   args: { [argName: string]: any },
+  context: any,
 ) => any;
 
 export type CacheResolverMap = {

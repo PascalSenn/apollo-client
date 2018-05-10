@@ -1,6 +1,34 @@
 # Change log
 
-### vNEXT
+### 1.2.0
+- Various optimizations for cache read performance [#3300](https://github.com/apollographql/apollo-client/pull/3300)
+- Fix typo in documentation
+
+### 1.1.12
+- Fix an edge case where fields that were unions of two types, one with an `id`,
+one without an `id`, would cause the cache to throw while saving the result [#3159](https://github.com/apollographql/apollo-client/pull/3159)
+- Map coverage to original source
+- Fixed bug with cacheRedirects not getting attached [#3016](https://github.com/apollographql/apollo-client/pull/3016)
+
+### 1.1.9
+- Added `getCacheKey` function to cacheResolver context [#2998](https://github.com/apollographql/apollo-client/pull/2998)
+- Changed `cacheResolvers` to `cacheRedirects`, added deprecation warning [#3001](https://github.com/apollographql/apollo-client/pull/3001)
+
+### 1.1.8
+- dependency updates
+- Fix IntrospectionResultData type definition [#2959](https://github.com/apollographql/apollo-client/issues/2959)
+
+### 1.1.7
+- update to latest apollo-utilities to support directives in cache
+
+### 1.1.6 (unpublished)
+- update to latest apollo-utilities
+
+### 1.1.5
+- Update to latest apollo-cache base [#2818](https://github.com/apollographql/apollo-client/pull/2818)
+
+### 1.1.4
+- Change access modifier for data from "private" to "protected", to allow InMemoryCache subclasses to access it.
 
 ### 1.1.3
 - improves performance of in memory cache

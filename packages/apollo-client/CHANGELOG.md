@@ -1,7 +1,46 @@
 
 # Change log
 
-### vNEXT
+### 2.3.0
+- fixed edge case bug of changing fetchPolicies right after resetStore with no variables present
+- Various optimizations for cache read performance [#3300](https://github.com/apollographql/apollo-client/pull/3300)
+
+### 2.2.8
+- Added the graphQLResultHasError in QueryManager.ts to check not only if result.errors is null, but also empty.
+- Errors occurring during fetchMore no longer errors out the original query [PR#2906](https://github.com/apollographql/apollo-client/pull/2906)
+- Map coverage to original source
+
+### 2.2.4
+- Added `getCacheKey` function to the link context for use in state-link [PR#2998](https://github.com/apollographql/apollo-client/pull/2998)
+- Fix `no-cache` fetch policy so it returns data [PR#3102](https://github.com/apollographql/apollo-client/pull/3102)
+- Fix Memory Leak in Query Manager [PR#3119](https://github.com/apollographql/apollo-client/pull/3119)
+- Pass non-optimistic query to `subscribeToMore` updateQuery
+[PR#3068](https://github.com/apollographql/apollo-client/pull/3068)
+- onResetStore callbacks occur before refetching Observable Queries[PR#3010](https://github.com/apollographql/apollo-client/pull/3010)
+- Error message for in flight queries during `resetStore` includes link completion note[PR#3010](https://github.com/apollographql/apollo-client/pull/3010)
+- `ApolloError` can now be checked with `instanceof` operator 
+- Fix navigator being undefined on React Native [PR##3164](https://github.com/apollographql/apollo-client/pull/3164)
+- Remove spread of variables preventing issues with removing keys [#3081](https://github.com/apollographql/apollo-client/pull/3081)
+
+### 2.2.3
+- dependency updates
+- Provide data when errorPolicy is set "all"
+
+### 2.2.2
+- Fixed potential race condition in mutations
+- Add new fetchPolicy called 'no-cache' to bypass reading from or saving to the cache when making a query
+
+### 2.2.1
+- Allow optional parameter to include queries in standby mode when refetching observed queries [PR#2804](https://github.com/apollographql/apollo-client/pull/2804)
+
+### 2.2.0
+- include `optimisticResponse` in the context passed to apollo-link for mutations [PR#2704](https://github.com/apollographql/apollo-client/pull/2704)
+- Add cache.writeData to base cache type & DataProxy [PR#2818](https://github.com/apollographql/apollo-client/pull/2818)
+- Error when invalid `cache-and-network` is provided as `query.fetchPolicy` within `defaultOptions`
+- add `onResetStore` method to the client to register callbacks after `client.resetStore` is called [PR#2812](https://github.com/apollographql/apollo-client/pull/2812)
+
+### 2.1.1
+- fix eslint usage by fixing jsnext:main path
 
 ### 2.1.0
 - Expose the cache methods `restore` and `extract` directly on ApolloClient  [PR#2615](https://github.com/apollographql/apollo-client/pull/2615)

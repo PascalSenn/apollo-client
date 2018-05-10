@@ -1,6 +1,34 @@
 # Change log
 
-## vNEXT
+### 4.1.10
+- Fix [#3393](https://github.com/apollographql/apollo-client/issues/3393)
+  [PR #3403](https://github.com/apollographql/apollo-client/pull/3403)
+
+### 4.1.9
+- Various optimizations for cache read performance [#3300](https://github.com/apollographql/apollo-client/pull/3300)
+
+### 4.1.8
+- Map coverage to original source
+
+### 4.1.4
+- dependency updates
+- support null literal
+- stop running the check function for a proptype check if the data is still loading
+
+### 4.1.3
+- update to latest apollo-utilities
+
+### 4.1.2
+- update to latest apollo-utilities
+
+### 4.1.1
+- package dependency updates
+
+### 4.1.0
+- add support for async resolution via `import { graphql } from 'graphql-anywhere/lib/async'` as an experimental way to do async resolvers
+
+### 4.1.0-alpha.0
+- add support for async resolution via `import { graphql } from 'graphql-anywhere/lib/async'` as an experimental way to do async resolvers
 
 ### 4.0.2
 - package dependency updates
